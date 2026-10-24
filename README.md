@@ -12,9 +12,9 @@ Projet de **Kay Nzogu** — octobre 2026.
 > **Stock Live** : une vente KND OS met à jour le stock des commerces Pro sur
 > Kindu Search via Supabase (ou le pont de démonstration local sans Supabase).
 > **Étape 6** : page **Don** Mobile Money manuel, page **/admin** de vérification,
-> **PWA installable** et configuration **EAS Build** pour l'APK. Le déploiement
-> Vercel/EAS n'a pas été exécuté : aucun compte authentifié n'est disponible dans
-> cet environnement (voir [Déploiement](#déploiement--en-attente-des-comptes)).
+> **PWA installable** et configuration **EAS Build** pour l'APK. Le dépôt GitHub
+> est publié sur `main` ; Vercel/EAS n'ont pas encore été déployés (voir
+> [Déploiement](#déploiement)).
 
 ---
 
@@ -520,14 +520,15 @@ La migration Étape 6 ajoute :
 
 L'installation réelle nécessite **HTTPS** (Vercel) ou `localhost`.
 
-### Déploiement — en attente des comptes
+### Déploiement
 
-Le code et les commandes sont prêts, mais aucune opération distante n'a été
-effectuée dans cet environnement.
+Le dépôt est publié sur GitHub : **https://github.com/therealkay-g/KND-OS**
+(branche `main`). Vercel et EAS restent à effectuer.
 
 **Vercel (Kindu Search)**
 
-1. Importer le dépôt dans Vercel et choisir le dossier racine **`kindu-search`**.
+1. Dans Vercel : **Add New → Project**, importer `therealkay-g/KND-OS`, puis
+   choisir **Root Directory `kindu-search`** (Framework Preset : Next.js).
 2. Définir les variables de production :
 
    ```bash
@@ -542,15 +543,20 @@ effectuée dans cet environnement.
    NEXT_PUBLIC_DEMO_BRIDGE=false
    ```
 
-3. Déployer :
+   Pour une démo sans Supabase, laisser les variables Supabase vides : Kindu
+   Search utilise `data/places.json` et le stock local. Garder
+   `DEMO_BRIDGE_ENABLED=false` et `NEXT_PUBLIC_DEMO_BRIDGE=false`.
+
+3. Cliquer sur **Deploy**. La CLI est une alternative :
 
    ```bash
    cd kindu-search
    npx vercel@latest --prod
    ```
 
-L'URL cible `https://kindu-search.vercel.app` ne peut être confirmée qu'après
-le déploiement effectif.
+L'URL cible `https://kindu-search.vercel.app` n'est obtenue que si le nom du
+projet est disponible ; sinon Vercel ajoute un suffixe. Elle ne peut être
+confirmée qu'après le déploiement effectif.
 
 > Arrêter le serveur `next dev` avant `next build`. Next 16 génère des types
 > différents pour le développement et la production ; garder les deux dans `.next`
