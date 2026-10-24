@@ -554,9 +554,8 @@ Le dépôt est publié sur GitHub : **https://github.com/therealkay-g/KND-OS**
    npx vercel@latest --prod
    ```
 
-L'URL cible `https://kindu-search.vercel.app` n'est obtenue que si le nom du
-projet est disponible ; sinon Vercel ajoute un suffixe. Elle ne peut être
-confirmée qu'après le déploiement effectif.
+L'URL de production visée est **`https://kindusearch.vercel.app`**. Elle ne
+répond qu'après un déploiement Vercel réussi sur la branche `main`.
 
 > Arrêter le serveur `next dev` avant `next build`. Next 16 génère des types
 > différents pour le développement et la production ; garder les deux dans `.next`

@@ -62,7 +62,7 @@ Kindu Search Page Don : texte soutien + 4 montants + boutons Airtel/Orange/M-Pes
 Page /admin : login simple (code Kay), carte avec pins gris (non vérifiés) / vert (vérifiés), liste "À vérifier", boutons Vérifier/Refuser
 Déploiement : Kindu Search sur Vercel (vercel.app), KND OS APK via EAS Build lien direct
 PWA installable
-Vérifiable : https://kindu-search.vercel.app accessible sur téléphone à Kindu, page /admin affiche 2 commerces en attente, page /don affiche boutons Mobile Money, bouton "Installer l'app" sur mobile
+Vérifiable : https://kindusearch.vercel.app accessible sur téléphone à Kindu, page /admin affiche 2 commerces en attente, page /don affiche boutons Mobile Money, bouton "Installer l'app" sur mobile
 Données : Supabase prod, donations table
 Étape 7 : Test Terrain Kasuku (Optionnel mais recommandé)
 But : tester avec 2 vrais commerçants
