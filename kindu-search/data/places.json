@@ -1,0 +1,239 @@
+[
+  {
+    "id": "quincaillerie-mbuyi",
+    "name": "Quincaillerie Mbuyi",
+    "category": "Quincaillerie",
+    "commune": "Kasuku",
+    "address": "Avenue du Commerce, près du marché central",
+    "hours": "07:30 – 18:00",
+    "whatsapp": "243970000101",
+    "phone": "+243 970 000 101",
+    "lat": -2.9475,
+    "lng": 25.9535,
+    "pro": true,
+    "merchantId": "merchant-local",
+    "stockLive": {
+      "updatedAt": "2026-10-20T08:00:00.000Z",
+      "products": [
+        {
+          "id": "prod-ciment",
+          "name": "Ciment CIMKO 50 kg",
+          "stock": 44,
+          "unit": "SAC",
+          "price": 35000
+        },
+        {
+          "id": "prod-barre-fer",
+          "name": "Barre de fer 12mm",
+          "stock": 30,
+          "unit": "BARRE 12m",
+          "price": 12000
+        },
+        {
+          "id": "prod-tole",
+          "name": "Tôle ondulée",
+          "stock": 30,
+          "unit": "PIECE",
+          "price": 25000
+        }
+      ]
+    },
+    "tone": "amber",
+    "description": "Ciment, tôles, barres de fer et matériaux de construction pour vos chantiers.",
+    "products": [
+      "Ciment Portland 50 kg",
+      "Tôle ondulée",
+      "Barre de fer 12 mm",
+      "Clous"
+    ]
+  },
+  {
+    "id": "pharmacie-kasuku",
+    "name": "Pharmacie Kasuku",
+    "category": "Pharmacie",
+    "commune": "Kasuku",
+    "address": "Avenue Lumumba, face au marché",
+    "hours": "08:00 – 20:00",
+    "whatsapp": "243970000102",
+    "phone": "+243 970 000 102",
+    "lat": -2.9438,
+    "lng": 25.9582,
+    "pro": true,
+    "merchantId": "merchant-pharmacie",
+    "stockLive": {
+      "updatedAt": "2026-10-20T08:00:00.000Z",
+      "products": [
+        {
+          "id": "prod-paracetamol",
+          "name": "Paracétamol 500 mg",
+          "stock": 20,
+          "unit": "PIECE",
+          "price": 1000
+        },
+        {
+          "id": "prod-amoxicilline",
+          "name": "Amoxicilline 500 mg",
+          "stock": 12,
+          "unit": "PIECE",
+          "price": 2500
+        }
+      ]
+    },
+    "tone": "green",
+    "description": "Médicaments essentiels, conseils et délivrance sur ordonnance.",
+    "products": [
+      "Paracétamol 500 mg",
+      "Amoxicilline",
+      "Sirop contre la toux",
+      "Vitamines"
+    ]
+  },
+  {
+    "id": "resto-le-baobab",
+    "name": "Resto Le Baobab",
+    "category": "Resto",
+    "commune": "Alunguli",
+    "address": "Avenue de la Paix, Alunguli",
+    "hours": "10:00 – 22:00",
+    "whatsapp": "243970000103",
+    "phone": "+243 970 000 103",
+    "lat": -2.9585,
+    "lng": 25.9405,
+    "pro": false,
+    "tone": "rose",
+    "description": "Cuisine locale : riz, poulet, poisson et plantains.",
+    "products": ["Riz au poulet", "Poisson braisé", "Plantains", "Jus de bissap"]
+  },
+  {
+    "id": "hotel-fleuve-congo",
+    "name": "Hôtel Fleuve Congo",
+    "category": "Hôtel",
+    "commune": "Mikelenge",
+    "address": "Boulevard du Fleuve, Mikelenge",
+    "hours": "24h/24",
+    "whatsapp": "243970000104",
+    "phone": "+243 970 000 104",
+    "lat": -2.9365,
+    "lng": 25.9445,
+    "pro": false,
+    "tone": "blue",
+    "description": "Chambres climatisées, restaurant et vue sur le fleuve.",
+    "products": ["Chambre simple", "Chambre double", "Petit-déjeuner", "Salle de réunion"]
+  },
+  {
+    "id": "magasin-umoja",
+    "name": "Magasin Umoja",
+    "category": "Magasin",
+    "commune": "Alunguli",
+    "address": "Marché d'Alunguli, allée 4",
+    "hours": "07:00 – 19:00",
+    "whatsapp": "243970000105",
+    "phone": "+243 970 000 105",
+    "lat": -2.9558,
+    "lng": 25.9338,
+    "pro": true,
+    "merchantId": "merchant-magasin",
+    "stockLive": {
+      "updatedAt": "2026-10-20T08:00:00.000Z",
+      "products": [
+        {
+          "id": "prod-sucre",
+          "name": "Sucre 1 kg",
+          "stock": 15,
+          "unit": "KG",
+          "price": 4000
+        },
+        {
+          "id": "prod-riz",
+          "name": "Riz 5 kg",
+          "stock": 8,
+          "unit": "PIECE",
+          "price": 15000
+        }
+      ]
+    },
+    "tone": "violet",
+    "description": "Produits de première nécessité au meilleur prix.",
+    "products": ["Sucre 1 kg", "Riz 5 kg", "Huile de palme", "Savon"]
+  },
+  {
+    "id": "alimentation-mama-nzuzi",
+    "name": "Alimentation Mama Nzuzi",
+    "category": "Alimentation",
+    "commune": "Kasuku",
+    "address": "Avenue Kasuku, près de l'école",
+    "hours": "06:30 – 18:30",
+    "whatsapp": "243970000106",
+    "phone": "+243 970 000 106",
+    "lat": -2.9512,
+    "lng": 25.9468,
+    "pro": false,
+    "tone": "orange",
+    "description": "Farine, haricots, arachides et produits frais du marché.",
+    "products": ["Farine de maïs", "Haricots", "Arachides", "Manioc"]
+  },
+  {
+    "id": "salon-grace",
+    "name": "Salon Grâce",
+    "category": "Salon",
+    "commune": "Mikelenge",
+    "address": "Avenue de l'Indépendance, Mikelenge",
+    "hours": "09:00 – 19:00",
+    "whatsapp": "243970000107",
+    "phone": "+243 970 000 107",
+    "lat": -2.9415,
+    "lng": 25.9318,
+    "pro": false,
+    "tone": "rose",
+    "description": "Coiffure, tresses, manucure et soins du visage.",
+    "products": ["Tresses", "Coupe femme", "Manucure", "Soin du visage"]
+  },
+  {
+    "id": "location-mavuno",
+    "name": "Location Mavuno",
+    "category": "Location",
+    "commune": "Alunguli",
+    "address": "Avenue Mavuno, Alunguli",
+    "hours": "08:00 – 17:00",
+    "whatsapp": "243970000108",
+    "phone": "+243 970 000 108",
+    "lat": -2.9622,
+    "lng": 25.9472,
+    "pro": true,
+    "tone": "teal",
+    "description": "Maisons, appartements et salles à louer pour tous les budgets.",
+    "products": ["Maison 2 chambres", "Appartement", "Salle de fête", "Terrain"]
+  },
+  {
+    "id": "resto-les-palmiers",
+    "name": "Resto Les Palmiers",
+    "category": "Resto",
+    "commune": "Mikelenge",
+    "address": "Route de Kalima, Mikelenge",
+    "hours": "11:00 – 23:00",
+    "whatsapp": "243970000109",
+    "phone": "+243 970 000 109",
+    "lat": -2.9468,
+    "lng": 25.9528,
+    "pro": false,
+    "tone": "amber",
+    "description": "Poisson du fleuve, frites et boissons fraîches.",
+    "products": ["Poisson frit", "Frites", "Boissons", "Brochettes"]
+  },
+  {
+    "id": "quincaillerie-tumaini",
+    "name": "Quincaillerie Tumaini",
+    "category": "Quincaillerie",
+    "commune": "Mikelenge",
+    "address": "Avenue Tumaini, Mikelenge",
+    "hours": "08:00 – 18:00",
+    "whatsapp": "243970000110",
+    "phone": "+243 970 000 110",
+    "lat": -2.9652,
+    "lng": 25.9555,
+    "pro": false,
+    "tone": "slate",
+    "description": "Peinture, vis, outils et petit matériel pour la maison.",
+    "products": ["Ciment 50 kg", "Peinture", "Vis et clous", "Marteau"]
+  }
+]

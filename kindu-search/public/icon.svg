@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Kindu Search">
+  <rect width="512" height="512" rx="112" fill="#FFC300"/>
+  <path d="M256 84c-73.3 0-132.7 59.4-132.7 132.7 0 99.5 132.7 210.6 132.7 210.6s132.7-111.1 132.7-210.6C388.7 143.4 329.3 84 256 84z" fill="#0A0A0A"/>
+  <circle cx="256" cy="216" r="48" fill="#FFC300"/>
+</svg>
