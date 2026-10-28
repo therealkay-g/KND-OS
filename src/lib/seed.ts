@@ -1,5 +1,5 @@
 /**
- * Données de démonstration (06-plan.md) :
+ * Données initiales (06-plan.md) :
  * - Magasin : 6 produits fake de l'Étape 1.
  * - Pharmacie : 2 produits fake avec molécule, péremption et ordonnance.
  * 2 clients communs, aucune vente pour que le dashboard démarre à 0 CDF.
@@ -82,11 +82,11 @@ const products: Product[] = [
 ];
 
 /**
- * Catalogue de démonstration du mode Pharmacie.
+ * Catalogue initial du mode Pharmacie.
  * Les dates reprennent l'exemple de docs/06-plan.md (2026-11-20) et une date
  * plus proche pour illustrer l'alerte rouge (< 30 jours).
  */
-export function createPharmacyDemoProducts(): Product[] {
+export function createPharmacyProducts(): Product[] {
   const timestamp = new Date().toISOString();
   return [
     {
@@ -120,12 +120,12 @@ export function createPharmacyDemoProducts(): Product[] {
 }
 
 /**
- * Catalogue de démonstration du mode Quincaillerie.
+ * Catalogue initial du mode Quincaillerie.
  * Les quantités du devis Chambre 4x4 (20 sacs + 15 barres + 20 tôles) sont
  * couvertes par ce stock. Seul le prix de 35 000 CDF/sac est documenté
- * (docs/03-design.md) ; les autres prix sont des valeurs de démo [À CONFIRMER].
+ * (docs/03-design.md) ; les autres prix restent à confirmer [À CONFIRMER].
  */
-export function createHardwareDemoProducts(): Product[] {
+export function createHardwareProducts(): Product[] {
   const timestamp = new Date().toISOString();
   return [
     {

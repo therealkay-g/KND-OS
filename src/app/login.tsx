@@ -101,10 +101,10 @@ export default function LoginScreen() {
               </KText>
             </View>
 
-            <View style={styles.demoCard}>
-              <KText variant="small" color={colors.textMuted} style={styles.demoText}>
-                <KText variant="small" color={colors.accent} style={styles.demoStrong}>
-                  Mode démo ·{' '}
+            <View style={styles.helpCard}>
+              <KText variant="small" color={colors.textMuted} style={styles.helpText}>
+                <KText variant="small" color={colors.accent} style={styles.helpStrong}>
+                  Connexion ·{' '}
                 </KText>
                 Saisissez un numéro à 9 chiffres, puis le code 1234.
               </KText>
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: colors.borderStrong,
   },
-  demoCard: {
+  helpCard: {
     borderWidth: 1,
     borderColor: colors.border,
     borderStyle: 'dashed',
@@ -184,10 +184,10 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: colors.cardSoft,
   },
-  demoText: {
+  helpText: {
     lineHeight: 18,
   },
-  demoStrong: {
+  helpStrong: {
     fontFamily: 'Inter_700Bold',
   },
 });

@@ -92,7 +92,7 @@ export async function pushStockLive(
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Demo-Sync-Token': token,
+          'X-Sync-Token': token,
         },
         body: JSON.stringify({ merchantId, stockLive: snapshot }),
       });
@@ -104,7 +104,7 @@ export async function pushStockLive(
           transport: 'bridge',
           message:
             body.trim() ||
-            `Le pont de démonstration a répondu ${response.status}.`,
+            `Le pont de synchronisation a répondu ${response.status}.`,
         };
       }
       return { ok: true, transport: 'bridge' };

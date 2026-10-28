@@ -347,7 +347,7 @@ export default function DevisScreen() {
               Payé en espèces · Merci !
             </KText>
             <KText variant="small" color={TICKET_MUTED} style={styles.ticketCenter}>
-              KND OS · ticket de démonstration
+              KND OS · ticket de vente
             </KText>
           </View>
         ) : null}

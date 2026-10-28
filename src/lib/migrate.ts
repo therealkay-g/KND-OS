@@ -7,7 +7,7 @@
  * à la lecture pour ne pas perdre les commerces existants.
  */
 
-import { demoMerchantIdForMode, isDemoMerchantId } from './merchant-link';
+import { seedMerchantIdForMode, isSeedMerchantId } from './merchant-link';
 import type { AppData, Commune, Merchant, SyncQueueItem } from './types';
 
 const DEFAULT_COMMUNE: Commune = 'Kasuku';
@@ -33,10 +33,10 @@ export function migrateMerchant(merchant: Merchant | null): Merchant | null {
     migrated = { ...rest, commune: neighborhood ?? DEFAULT_COMMUNE };
   }
 
-  // Les anciens profils de démo partageaient `merchant-local`. On les relie
+  // Les anciens profils initiaux partageaient `merchant-local`. On les relie
   // à la fiche Kindu Search correspondant à leur mode de commerce.
-  if (isDemoMerchantId(migrated.id)) {
-    const expectedId = demoMerchantIdForMode(migrated.mode);
+  if (isSeedMerchantId(migrated.id)) {
+    const expectedId = seedMerchantIdForMode(migrated.mode);
     if (migrated.id !== expectedId) {
       migrated = { ...migrated, id: expectedId };
     }

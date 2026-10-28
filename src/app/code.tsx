@@ -55,7 +55,7 @@ export default function CodeScreen() {
 
   const handleResend = () => {
     requestOtp(phone);
-    setInfo('Un nouveau code a été envoyé (démo : 1234).');
+    setInfo('Un nouveau code a été envoyé (code : 1234).');
     setError('');
   };
 
@@ -126,10 +126,10 @@ export default function CodeScreen() {
               </Pressable>
             </View>
 
-            <View style={styles.demoCard}>
-              <KText variant="small" color={colors.textMuted} style={styles.demoText}>
-                <KText variant="small" color={colors.accent} style={styles.demoStrong}>
-                  Mode démo ·{' '}
+            <View style={styles.helpCard}>
+              <KText variant="small" color={colors.textMuted} style={styles.helpText}>
+                <KText variant="small" color={colors.accent} style={styles.helpStrong}>
+                  Code de connexion ·{' '}
                 </KText>
                 Le code de développement est {DEV_OTP_CODE}.
               </KText>
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   resendStrong: {
     fontFamily: 'Inter_700Bold',
   },
-  demoCard: {
+  helpCard: {
     borderWidth: 1,
     borderColor: colors.border,
     borderStyle: 'dashed',
@@ -216,10 +216,10 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: colors.cardSoft,
   },
-  demoText: {
+  helpText: {
     lineHeight: 18,
   },
-  demoStrong: {
+  helpStrong: {
     fontFamily: 'Inter_700Bold',
   },
 });

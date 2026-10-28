@@ -15,11 +15,11 @@ import React, {
 } from 'react';
 
 import { createId } from './id';
-import { demoMerchantIdForMode, isDemoMerchantId } from './merchant-link';
+import { seedMerchantIdForMode, isSeedMerchantId } from './merchant-link';
 import {
-  createHardwareDemoProducts,
+  createHardwareProducts,
   createInitialData,
-  createPharmacyDemoProducts,
+  createPharmacyProducts,
 } from './seed';
 import {
   getClientDebt,
@@ -350,7 +350,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const completeOnboarding = useCallback(
     (input: { phone: string; storeName: string; commune: Commune; mode: StoreMode }) => {
       const merchant: Merchant = {
-        id: demoMerchantIdForMode(input.mode),
+        id: seedMerchantIdForMode(input.mode),
         phone: input.phone,
         storeName: input.storeName.trim(),
         commune: input.commune,
@@ -360,9 +360,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       commit((previous) => {
         const nextProducts =
           input.mode === 'Pharmacie'
-            ? createPharmacyDemoProducts()
+            ? createPharmacyProducts()
             : input.mode === 'Quincaillerie'
-              ? createHardwareDemoProducts()
+              ? createHardwareProducts()
               : previous.products;
         const stockItem = createStockQueueItem(
           merchant.id,
@@ -401,8 +401,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const merchant: Merchant = {
         ...current.merchant,
         mode,
-        id: isDemoMerchantId(current.merchant.id)
-          ? demoMerchantIdForMode(mode)
+        id: isSeedMerchantId(current.merchant.id)
+          ? seedMerchantIdForMode(mode)
           : current.merchant.id,
       };
       commit((previous) => ({
