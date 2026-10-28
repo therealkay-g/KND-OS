@@ -30,6 +30,9 @@ export function SiteFooter() {
             <Heart size={13} strokeWidth={2.2} className="fill-knd text-ink" />
             Soutenir
           </Link>
+          <Link href="/admin" className="inline-flex min-h-12 items-center transition-colors hover:text-ink">
+            Admin
+          </Link>
           <InstallApp />
           <a
             href="https://www.openstreetmap.org/copyright"
