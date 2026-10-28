@@ -203,7 +203,7 @@ export default function AddPlacePage() {
           <p className="mt-4 text-[10px] text-muted">
             {remoteEnabled
               ? 'Fiche envoyée à Kindu Search · vérification manuelle sous 48h.'
-              : 'Démo locale : aucune donnée n’est envoyée à un serveur.'}
+              : 'Aucune donnée n’est envoyée à un serveur.'}
           </p>
         </div>
       </div>
@@ -431,7 +431,7 @@ export default function AddPlacePage() {
           En envoyant, vous acceptez d&apos;être contacté sur WhatsApp.{' '}
           {remoteEnabled
             ? 'Votre fiche sera vérifiée sous 48h.'
-            : 'Démo locale : la fiche reste sur cet appareil.'}
+            : 'La fiche reste sur cet appareil.'}
         </p>
       </form>
     </div>

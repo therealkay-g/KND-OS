@@ -66,8 +66,8 @@ export default function HomePage() {
     source === 'supabase'
       ? 'Stock live Supabase · OpenStreetMap'
       : source === 'bridge'
-        ? 'Démo locale · stock synchronisé · OpenStreetMap'
-        : 'Données de démonstration · OpenStreetMap';
+        ? 'Stock synchronisé · OpenStreetMap'
+        : 'Annuaire Kindu · OpenStreetMap';
 
   const resetFilters = () => {
     setQuery('');

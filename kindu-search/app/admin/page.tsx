@@ -19,7 +19,7 @@ import {
 import { PlacePhoto } from '@/components/place-photo';
 import {
   ADMIN_DECISIONS_EVENT,
-  loadAdminDemoPlaces,
+  loadAdminPlaces,
   recordAdminDecision,
 } from '@/lib/admin-local';
 import {
@@ -34,17 +34,13 @@ const MapView = dynamic(() => import('@/components/map-view'), {
   loading: () => <div className="map-loading">Chargement de la carte…</div>,
 });
 
-type AdminMode = 'demo' | 'supabase';
+type AdminMode = 'local' | 'supabase';
 
 interface PlacesResponse {
   mode?: AdminMode;
   places?: Place[];
   message?: string;
 }
-
-const demoHintVisible =
-  !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-  process.env.NEXT_PUBLIC_ADMIN_DEMO_HINT === 'true';
 
 export default function AdminPage() {
   const [checking, setChecking] = useState(true);
@@ -79,10 +75,10 @@ export default function AdminPage() {
         return;
       }
 
-      const nextMode = payload.mode === 'supabase' ? 'supabase' : 'demo';
+      const nextMode = payload.mode === 'supabase' ? 'supabase' : 'local';
       setMode(nextMode);
-      if (nextMode === 'demo') {
-        setPlaces(loadAdminDemoPlaces());
+      if (nextMode === 'local') {
+        setPlaces(loadAdminPlaces());
       } else {
         setPlaces(
           (payload.places ?? []).map((place) => ({
@@ -123,8 +119,8 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    if (mode !== 'demo') return;
-    const refresh = () => setPlaces(loadAdminDemoPlaces());
+    if (mode !== 'local') return;
+    const refresh = () => setPlaces(loadAdminPlaces());
     window.addEventListener(ADMIN_DECISIONS_EVENT, refresh);
     window.addEventListener('storage', refresh);
     return () => {
@@ -184,7 +180,7 @@ export default function AdminPage() {
         return;
       }
 
-      if (mode === 'demo') {
+      if (mode === 'local') {
         if (action === 'verify') {
           if (!saveUserPlace({ ...place, verified: true })) {
             setError(
@@ -277,14 +273,6 @@ export default function AdminPage() {
             </button>
           </form>
 
-          {demoHintVisible ? (
-            <p className="mt-4 rounded-xl bg-knd/15 px-3 py-2 text-[11px] leading-5 text-ink">
-              Mode démo : code <strong>kay-demo</strong>. En production, définissez
-              {' '}
-              <code className="rounded bg-white/70 px-1">ADMIN_ACCESS_CODE</code>.
-            </p>
-          ) : null}
-
           <Link
             href="/"
             className="mt-4 inline-flex min-h-12 items-center gap-1.5 text-xs font-semibold text-muted transition hover:text-ink">
@@ -310,7 +298,7 @@ export default function AdminPage() {
             <p className="mt-1 text-sm text-muted">
               {mode === 'supabase'
                 ? 'Connecté à Supabase · les décisions sont enregistrées.'
-                : 'Mode démo local · les décisions restent dans ce navigateur.'}
+                : 'Les décisions restent dans ce navigateur.'}
             </p>
           </div>
           <button

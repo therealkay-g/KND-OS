@@ -313,7 +313,7 @@ export default function PlacePage() {
               <MapView places={mapPlaces} />
             </div>
             <p className="px-1 pt-2 text-[10px] leading-4 text-muted">
-              Position approximative pour la démonstration. L&apos;équipe confirme
+              Position approximative. L&apos;équipe confirme
               l&apos;adresse lors de la vérification.
             </p>
           </div>

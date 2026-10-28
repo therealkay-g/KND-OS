@@ -7,9 +7,9 @@ import type { Place } from '@/lib/places';
 import { PlacePhoto } from './place-photo';
 
 const SLIDES = [
-  { label: 'Devanture', caption: 'Illustration de démonstration' },
-  { label: 'Intérieur', caption: 'Illustration de démonstration' },
-  { label: 'Produits', caption: 'Illustration de démonstration' },
+  { label: 'Devanture', caption: 'Illustration' },
+  { label: 'Intérieur', caption: 'Illustration' },
+  { label: 'Produits', caption: 'Illustration' },
 ];
 
 export function PhotoGallery({ place }: { place: Place }) {

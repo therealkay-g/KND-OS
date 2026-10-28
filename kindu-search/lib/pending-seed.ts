@@ -1,11 +1,11 @@
 import type { Place } from './places';
 
 /**
- * Deux fiches fictives en attente, pour la recette locale de /admin.
+ * Deux fiches initiales en attente, pour la recette locale de /admin.
  * Elles ne sont jamais affichées dans l'annuaire public tant qu'elles ne sont
  * pas vérifiées. La migration Supabase contient les mêmes deux fiches.
  */
-export const DEMO_PENDING_PLACES: Place[] = [
+export const SEED_PENDING_PLACES: Place[] = [
   {
     id: 'alimentation-beya',
     name: 'Alimentation Beya',

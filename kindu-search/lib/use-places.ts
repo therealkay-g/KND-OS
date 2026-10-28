@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import {
-  DEMO_PLACES,
+  SEED_PLACES,
   isValidStockLive,
   type Place,
   type StockLive,
@@ -15,7 +15,7 @@ import {
 } from './supabase-places';
 import { getSupabaseClient } from './supabase';
 
-export type PlacesSource = 'demo' | 'bridge' | 'supabase';
+export type PlacesSource = 'seed' | 'bridge' | 'supabase';
 
 export interface UsePlacesResult {
   places: Place[];
@@ -26,8 +26,8 @@ export interface UsePlacesResult {
 }
 
 const BRIDGE_POLL_MS = 2_000;
-const demoBridgeEnabled =
-  process.env.NEXT_PUBLIC_DEMO_BRIDGE === 'true' ||
+const bridgePollingEnabled =
+  process.env.NEXT_PUBLIC_BRIDGE === 'true' ||
   process.env.NODE_ENV === 'development';
 
 type Row = Record<string, unknown>;
@@ -35,13 +35,13 @@ type Row = Record<string, unknown>;
 /**
  * Source de vérité de Kindu Search :
  * 1. Supabase si les variables NEXT_PUBLIC_SUPABASE_* sont présentes ;
- * 2. sinon les 10 fiches de démo, enrichies par le pont local /api/stock-live
+ * 2. sinon les 10 fiches initiales, enrichies par le pont local /api/stock-live
  *    quand KND OS tourne sans Supabase (recette locale).
  */
 export function usePlaces(): UsePlacesResult {
   const supabase = getSupabaseClient();
-  const [places, setPlaces] = useState<Place[]>(DEMO_PLACES);
-  const [source, setSource] = useState<PlacesSource>('demo');
+  const [places, setPlaces] = useState<Place[]>(SEED_PLACES);
+  const [source, setSource] = useState<PlacesSource>('seed');
   const [loading, setLoading] = useState(Boolean(supabase));
   const [error, setError] = useState<string | null>(null);
   const [bridgeActive, setBridgeActive] = useState(false);
@@ -63,9 +63,9 @@ export function usePlaces(): UsePlacesResult {
           setError(
             cause instanceof Error
               ? cause.message
-              : 'Supabase indisponible, données de démonstration affichées.',
+              : 'Supabase indisponible, données locales affichées.',
           );
-          setSource('demo');
+          setSource('seed');
         })
         .finally(() => {
           if (active) setLoading(false);
@@ -137,7 +137,7 @@ export function usePlaces(): UsePlacesResult {
       };
     }
 
-    if (!demoBridgeEnabled) {
+    if (!bridgePollingEnabled) {
       setLoading(false);
       return;
     }

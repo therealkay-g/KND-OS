@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
 import { isAdminAuthenticated } from '@/lib/admin-auth';
-import { DEMO_PENDING_PLACES } from '@/lib/demo-pending';
-import { DEMO_PLACES, type Place } from '@/lib/places';
+import { SEED_PENDING_PLACES } from '@/lib/pending-seed';
+import { SEED_PLACES, type Place } from '@/lib/places';
 import { mapPlaceRow } from '@/lib/supabase-places';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
@@ -22,8 +22,8 @@ export async function GET() {
   const admin = getSupabaseAdmin();
   if (!admin) {
     return NextResponse.json({
-      mode: 'demo',
-      places: [...DEMO_PLACES, ...DEMO_PENDING_PLACES],
+      mode: 'local',
+      places: [...SEED_PLACES, ...SEED_PENDING_PLACES],
     });
   }
 

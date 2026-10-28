@@ -1,6 +1,6 @@
-import { DEMO_PENDING_PLACES } from './demo-pending';
+import { SEED_PENDING_PLACES } from './pending-seed';
 import {
-  DEMO_PLACES,
+  SEED_PLACES,
   isPlacePending,
   loadUserPlaces,
   type Place,
@@ -53,25 +53,25 @@ export function recordAdminDecision(id: string, decision: 'verified' | 'refused'
   }
 }
 
-/** Fiches de démo encore en attente (non traitées dans ce navigateur). */
-export function getDemoPendingPlaces(): Place[] {
+/** Fiches initiales encore en attente (non traitées dans ce navigateur). */
+export function getSeedPendingPlaces(): Place[] {
   const decisions = loadAdminDecisions();
-  return DEMO_PENDING_PLACES.filter(
+  return SEED_PENDING_PLACES.filter(
     (place) =>
       !decisions.verified.includes(place.id) &&
       !decisions.refused.includes(place.id),
   );
 }
 
-/** Toutes les fiches visibles dans l'admin local : démo + fiches de l'appareil. */
-export function loadAdminDemoPlaces(): Place[] {
+/** Toutes les fiches visibles dans l'admin local : initiales + fiches de l'appareil. */
+export function loadAdminPlaces(): Place[] {
   const places = new Map<string, Place>();
-  for (const place of DEMO_PLACES) places.set(place.id, place);
-  for (const place of getDemoPendingPlaces()) places.set(place.id, place);
+  for (const place of SEED_PLACES) places.set(place.id, place);
+  for (const place of getSeedPendingPlaces()) places.set(place.id, place);
   for (const place of loadUserPlaces()) places.set(place.id, place);
   return Array.from(places.values());
 }
 
 export function loadAdminPendingPlaces(): Place[] {
-  return loadAdminDemoPlaces().filter(isPlacePending);
+  return loadAdminPlaces().filter(isPlacePending);
 }

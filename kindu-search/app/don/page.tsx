@@ -89,7 +89,7 @@ export default function DonPage() {
         return;
       }
     } else {
-      // Mode démo : le don reste dans ce navigateur, en attendant Supabase.
+      // Le don reste dans ce navigateur, en attendant Supabase.
       try {
         const key = 'kindu-search:donations:v1';
         const raw = window.localStorage.getItem(key);
@@ -251,7 +251,7 @@ export default function DonPage() {
                 <CheckCircle2 size={15} strokeWidth={2.5} className="mt-0.5 shrink-0" />
                 {remoteDonations
                   ? 'Don enregistré. Kay confirmera après réception de la capture.'
-                  : 'Don enregistré localement (démo). Aucune donnée n’est envoyée.'}
+                  : 'Don enregistré localement. Aucune donnée n’est envoyée.'}
               </p>
             ) : (
               <form onSubmit={handleSaveDonation} className="mt-3 space-y-2">

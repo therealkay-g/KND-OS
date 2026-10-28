@@ -1,4 +1,4 @@
-import demoData from '@/data/places.json';
+import seedData from '@/data/places.json';
 
 export type Category =
   | 'Resto'
@@ -36,7 +36,7 @@ export interface StockLive {
   products: StockLiveProduct[];
 }
 
-export type PlaceSource = 'demo' | 'supabase' | 'user';
+export type PlaceSource = 'seed' | 'supabase' | 'user';
 
 export interface Place {
   id: string;
@@ -63,7 +63,7 @@ export interface Place {
   /** Snapshot de stock envoyé par KND OS (commerces Pro). */
   stockLive?: StockLive | null;
   updatedAt?: string;
-  /** Fiche vérifiée par l'admin Kay. Les fiches de démo sont vérifiées. */
+  /** Fiche vérifiée par l'admin Kay. Les fiches initiales sont vérifiées. */
   verified?: boolean;
 }
 
@@ -121,17 +121,17 @@ const COMMUNE_CENTERS: Record<Commune, [number, number]> = {
   Mikelenge: [-2.944, 25.938],
 };
 
-/** 10 commerces fictifs de la démo (06-plan.md, Étape 4). */
-const DEMO_STOCK_UPDATED_AT = new Date().toISOString();
+/** 10 commerces de départ (06-plan.md, Étape 4). */
+const SEED_STOCK_UPDATED_AT = new Date().toISOString();
 
-export const DEMO_PLACES: Place[] = (demoData as unknown as Place[]).map((place) => ({
+export const SEED_PLACES: Place[] = (seedData as unknown as Place[]).map((place) => ({
   ...place,
-  source: 'demo',
+  source: 'seed',
   verified: true,
-  // Les fiches de démo n'ont pas de backend : leur stock est considéré comme
+  // Les fiches initiales n'ont pas de backend : leur stock est considéré comme
   // frais à l'ouverture, pour illustrer le badge « Stock vérifié Live ».
   stockLive: place.stockLive
-    ? { ...place.stockLive, updatedAt: DEMO_STOCK_UPDATED_AT }
+    ? { ...place.stockLive, updatedAt: SEED_STOCK_UPDATED_AT }
     : undefined,
 }));
 
@@ -488,7 +488,7 @@ export function removeUserPlace(id: string): boolean {
 export function findPlace(
   id: string,
   userPlaces: Place[],
-  places: Place[] = DEMO_PLACES,
+  places: Place[] = SEED_PLACES,
 ): Place | null {
   return (
     places.find((place) => place.id === id) ??

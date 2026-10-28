@@ -41,13 +41,10 @@ export function SiteFooter() {
             className="inline-flex min-h-12 items-center transition-colors hover:text-ink">
             OpenStreetMap
           </a>
-          <span className="rounded-full border border-line px-2.5 py-1 text-[10px] uppercase tracking-wide">
-            Démo
-          </span>
         </div>
       </div>
       <div className="border-t border-line/70 px-4 py-3 text-center text-[10px] text-muted sm:px-6">
-        Données de démonstration · 10 commerces fictifs · Aucun paiement en ligne
+        Annuaire public de Kindu · Aucun paiement en ligne
       </div>
     </footer>
   );

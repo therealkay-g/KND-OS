@@ -49,8 +49,8 @@ export async function PATCH(
 
   const admin = getSupabaseAdmin();
   if (!admin) {
-    // Mode démo : la page /admin met à jour son stockage local.
-    return NextResponse.json({ ok: true, mode: 'demo', action });
+    // Mode local : la page /admin met à jour son stockage local.
+    return NextResponse.json({ ok: true, mode: 'local', action });
   }
 
   const now = new Date().toISOString();

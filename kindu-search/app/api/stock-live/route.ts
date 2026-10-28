@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import {
-  DEMO_PLACES,
+  SEED_PLACES,
   isValidStockLive,
   type StockLive,
 } from '@/lib/places';
@@ -9,35 +9,35 @@ import {
 export const dynamic = 'force-dynamic';
 
 /**
- * Pont de démonstration local, utilisé uniquement quand Supabase n'est pas
+ * Pont de synchronisation local, utilisé uniquement quand Supabase n'est pas
  * configuré. Il permet de vérifier le scénario 44 → 43 sacs entre KND OS
  * (port 5173) et Kindu Search (port 3000) sans projet Supabase.
  *
  * En production, le temps réel passe par Supabase Realtime.
  */
 const globalStore = globalThis as typeof globalThis & {
-  __kinduDemoStock?: Map<string, StockLive>;
+  __kinduStockStore?: Map<string, StockLive>;
 };
 
-const stockStore = globalStore.__kinduDemoStock ?? new Map<string, StockLive>();
-globalStore.__kinduDemoStock = stockStore;
+const stockStore = globalStore.__kinduStockStore ?? new Map<string, StockLive>();
+globalStore.__kinduStockStore = stockStore;
 
 const merchantToPlace = new Map(
-  DEMO_PLACES.filter((place) => place.merchantId).map((place) => [
+  SEED_PLACES.filter((place) => place.merchantId).map((place) => [
     place.merchantId as string,
     place.id,
   ]),
 );
 
-const demoToken = process.env.DEMO_SYNC_TOKEN ?? 'demo-sync-token-kay';
+const syncToken = process.env.SYNC_TOKEN ?? 'sync-token-kay';
 const bridgeEnabled =
-  process.env.DEMO_BRIDGE_ENABLED === 'true' ||
+  process.env.BRIDGE_ENABLED === 'true' ||
   process.env.NODE_ENV !== 'production';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, X-Demo-Sync-Token',
+  'Access-Control-Allow-Headers': 'Content-Type, X-Sync-Token',
   'Cache-Control': 'no-store',
 };
 
@@ -48,14 +48,14 @@ export async function OPTIONS() {
 export async function GET() {
   if (!bridgeEnabled) {
     return NextResponse.json(
-      { ok: false, message: 'Pont de démonstration désactivé.' },
+      { ok: false, message: 'Pont de synchronisation désactivé.' },
       { status: 404, headers: corsHeaders },
     );
   }
 
   return NextResponse.json(
     {
-      mode: 'demo-bridge',
+      mode: 'bridge',
       places: Array.from(stockStore.entries()).map(([placeId, stockLive]) => ({
         placeId,
         stockLive,
@@ -68,15 +68,15 @@ export async function GET() {
 export async function POST(request: Request) {
   if (!bridgeEnabled) {
     return NextResponse.json(
-      { ok: false, message: 'Pont de démonstration désactivé.' },
+      { ok: false, message: 'Pont de synchronisation désactivé.' },
       { status: 404, headers: corsHeaders },
     );
   }
 
-  const token = request.headers.get('x-demo-sync-token') ?? '';
-  if (token !== demoToken) {
+  const token = request.headers.get('x-sync-token') ?? '';
+  if (token !== syncToken) {
     return NextResponse.json(
-      { ok: false, message: 'Jeton de démonstration invalide.' },
+      { ok: false, message: 'Jeton de synchronisation invalide.' },
       { status: 401, headers: corsHeaders },
     );
   }
@@ -112,7 +112,7 @@ export async function POST(request: Request) {
   const placeId = merchantToPlace.get(merchantId);
   if (!placeId) {
     return NextResponse.json(
-      { ok: false, message: 'Aucune fiche de démonstration liée à ce commerce.' },
+      { ok: false, message: 'Aucune fiche liée à ce commerce.' },
       { status: 404, headers: corsHeaders },
     );
   }

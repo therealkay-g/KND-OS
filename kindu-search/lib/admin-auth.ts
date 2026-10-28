@@ -3,9 +3,9 @@ import { cookies } from 'next/headers';
 
 export const ADMIN_COOKIE = 'kindu_admin';
 
-/** Code de démonstration. En production, définir ADMIN_ACCESS_CODE. */
+/** Code d'accès. Surchargeable via ADMIN_ACCESS_CODE. */
 export function adminAccessCode(): string {
-  return process.env.ADMIN_ACCESS_CODE?.trim() || 'kay-demo';
+  return process.env.ADMIN_ACCESS_CODE?.trim() || '101276';
 }
 
 function sessionSecret(): string {

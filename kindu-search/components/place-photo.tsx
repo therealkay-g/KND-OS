@@ -9,8 +9,8 @@ interface PlacePhotoProps {
 }
 
 /**
- * Illustration de démonstration (dégradé + emoji) ou photo importée.
- * Les fiches de démo n'ont pas de photos réelles : on l'indique dans la galerie.
+ * Illustration (dégradé + emoji) ou photo importée.
+ * Les fiches initiales n'ont pas de photos réelles : on l'indique dans la galerie.
  */
 export function PlacePhoto({
   place,
