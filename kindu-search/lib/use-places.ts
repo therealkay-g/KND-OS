@@ -147,7 +147,7 @@ export function usePlaces(): UsePlacesResult {
     const pollBridge = async () => {
       try {
         const response = await fetch('/api/stock-live', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Pont de démonstration indisponible.');
+        if (!response.ok) throw new Error('Pont de synchronisation indisponible.');
 
         const payload = (await response.json()) as {
           places?: Array<{ placeId?: unknown; stockLive?: unknown }>;
@@ -179,7 +179,7 @@ export function usePlaces(): UsePlacesResult {
         setError(null);
       } catch {
         if (active) {
-          setError('Pont de démonstration indisponible.');
+          setError('Pont de synchronisation indisponible.');
         }
       }
     };
