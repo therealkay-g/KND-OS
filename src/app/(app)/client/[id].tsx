@@ -5,6 +5,7 @@ import {
   ArrowDownLeft,
   ArrowUpRight,
   Banknote,
+  MessageCircle,
   Users,
   Wallet,
 } from 'lucide-react-native';
@@ -23,6 +24,7 @@ import { useApp } from '@/lib/data-provider';
 import { formatCDF, formatDateTime, formatPhone } from '@/lib/format';
 import { getClientDebt } from '@/lib/stats';
 import { colors, radius } from '@/lib/theme';
+import { contactMessage, debtReminderMessage, openWhatsApp } from '@/lib/whatsapp';
 
 type TimelineEntry =
   | { kind: 'credit'; id: string; date: string; amount: number; label: string }
@@ -38,6 +40,7 @@ export default function ClientDetailScreen() {
 
   const client = data.clients.find((entry) => entry.id === params.id);
   const debt = client ? getClientDebt(data, client.id) : 0;
+  const storeName = data.merchant?.storeName ?? 'KND OS';
 
   const timeline = useMemo<TimelineEntry[]>(() => {
     if (!client) return [];
@@ -97,6 +100,21 @@ export default function ClientDetailScreen() {
     toast(`Dette encaissée : ${formatCDF(parsed)}.`);
   };
 
+  const handleWhatsApp = async () => {
+    if (!client.phone) {
+      toast('Ajoutez un numéro WhatsApp à ce client pour le contacter.', 'error');
+      return;
+    }
+    const message =
+      debt > 0
+        ? debtReminderMessage(storeName, client.name, debt)
+        : contactMessage(storeName, client.name);
+    const opened = await openWhatsApp(client.phone, message);
+    if (!opened) {
+      toast('WhatsApp n’a pas pu être ouvert. Vérifiez le numéro du client.', 'error');
+    }
+  };
+
   return (
     <View style={styles.root}>
       <Page>
@@ -136,13 +154,21 @@ export default function ClientDetailScreen() {
           </View>
         </Card>
 
-        {debt > 0 ? (
+        <View style={styles.actions}>
+          {debt > 0 ? (
+            <AppButton
+              label="Encaisser dette"
+              onPress={openPayment}
+              icon={<Banknote size={18} color={colors.black} strokeWidth={2} />}
+            />
+          ) : null}
           <AppButton
-            label="Encaisser dette"
-            onPress={openPayment}
-            icon={<Banknote size={18} color={colors.black} strokeWidth={2} />}
+            label={debt > 0 ? 'Relancer par WhatsApp' : 'Contacter par WhatsApp'}
+            onPress={handleWhatsApp}
+            variant="whatsapp"
+            icon={<MessageCircle size={18} color={colors.white} strokeWidth={2} />}
           />
-        ) : null}
+        </View>
 
         <View style={styles.sectionHeader}>
           <KText variant="label" color={colors.textSecondary}>
@@ -270,6 +296,9 @@ const styles = StyleSheet.create({
   debtCardClear: {
     borderColor: colors.greenBorder,
     backgroundColor: colors.greenSoft,
+  },
+  actions: {
+    gap: 10,
   },
   debtTexts: {
     flex: 1,

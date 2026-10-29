@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   ChevronRight,
   ClipboardList,
+  MessageCircle,
   Wrench,
 } from 'lucide-react-native';
 
@@ -13,6 +14,7 @@ import { AppButton } from '@/components/ui/app-button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
+import { Field } from '@/components/ui/field';
 import { Page } from '@/components/ui/page';
 import { Sheet } from '@/components/ui/sheet';
 import { KText } from '@/components/ui/text';
@@ -26,6 +28,7 @@ import {
 } from '@/lib/format';
 import { colors, radius } from '@/lib/theme';
 import type { Product, Sale, Unit } from '@/lib/types';
+import { openWhatsApp, saleWhatsAppMessage } from '@/lib/whatsapp';
 
 /** Gris lisible sur le ticket blanc (le thème est prévu pour fond noir). */
 const TICKET_MUTED = '#52525B';
@@ -106,6 +109,8 @@ export default function DevisScreen() {
   const [typeSheetOpen, setTypeSheetOpen] = useState(false);
   const [quoteType, setQuoteType] = useState<QuoteType | null>(null);
   const [ticket, setTicket] = useState<Sale | null>(null);
+  const [ticketPhone, setTicketPhone] = useState('');
+  const storeName = data.merchant?.storeName ?? 'KND OS';
 
   const template = QUOTE_TYPES.find((entry) => entry.value === quoteType) ?? null;
 
@@ -144,10 +149,21 @@ export default function DevisScreen() {
       return;
     }
     setTicket(result.sale);
+    setTicketPhone('');
     setQuoteType(null);
   };
 
-  const storeName = data.merchant?.storeName ?? 'KND OS';
+  const sendTicket = async () => {
+    if (!ticket) return;
+    if (!ticketPhone.trim()) {
+      toast('Entrez le numéro WhatsApp du client.', 'error');
+      return;
+    }
+    const opened = await openWhatsApp(ticketPhone, saleWhatsAppMessage(storeName, ticket));
+    if (!opened) {
+      toast('Numéro WhatsApp invalide. Vérifiez les 9 chiffres.', 'error');
+    }
+  };
 
   return (
     <Page>
@@ -351,7 +367,32 @@ export default function DevisScreen() {
             </KText>
           </View>
         ) : null}
-        <AppButton label="Fermer le ticket" onPress={() => setTicket(null)} variant="ghost" size="md" />
+        {ticket ? (
+          <Field
+            label="Téléphone WhatsApp du client"
+            value={ticketPhone}
+            onChangeText={(value) => setTicketPhone(value.replace(/\D/g, '').slice(0, 9))}
+            placeholder="97 000 0000"
+            keyboardType="phone-pad"
+            prefix="+243"
+            helper="Le ticket sera pré-rempli dans WhatsApp, puis vous validez l’envoi."
+          />
+        ) : null}
+        <View style={styles.ticketActions}>
+          <AppButton
+            label="Fermer le ticket"
+            onPress={() => setTicket(null)}
+            variant="ghost"
+            size="md"
+          />
+          <AppButton
+            label="Envoyer sur WhatsApp"
+            onPress={sendTicket}
+            variant="whatsapp"
+            size="md"
+            icon={<MessageCircle size={18} color={colors.white} strokeWidth={2} />}
+          />
+        </View>
       </Sheet>
     </Page>
   );
@@ -507,5 +548,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingTop: 2,
+  },
+  ticketActions: {
+    gap: 10,
   },
 });

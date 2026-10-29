@@ -14,6 +14,7 @@ import {
   AlertTriangle,
   Camera,
   ChevronRight,
+  MessageCircle,
   Minus,
   Plus,
   Search,
@@ -37,6 +38,7 @@ import { useApp } from '@/lib/data-provider';
 import {
   formatCDF,
   formatCountLabel,
+  formatDateTime,
   formatPhone,
   formatQuantity,
   formatStock,
@@ -45,9 +47,13 @@ import {
 import { pickPrescriptionPhoto } from '@/lib/prescription-photo';
 import { getClientDebt, isLowStock } from '@/lib/stats';
 import { colors, layout, radius } from '@/lib/theme';
-import type { Product } from '@/lib/types';
+import type { Product, Sale } from '@/lib/types';
+import { openWhatsApp, saleWhatsAppMessage } from '@/lib/whatsapp';
 
-type CheckoutStep = 'cart' | 'credit' | 'new-client';
+type CheckoutStep = 'cart' | 'credit' | 'new-client' | 'ticket';
+
+/** Gris lisible sur le ticket blanc (le thème est prévu pour fond noir). */
+const TICKET_MUTED = '#52525B';
 
 const webInputStyle =
   Platform.OS === 'web' ? ({ outlineStyle: 'none' } as unknown as TextStyle) : undefined;
@@ -67,8 +73,11 @@ export default function VenteScreen() {
   const [clientError, setClientError] = useState('');
   const [prescriptionGate, setPrescriptionGate] = useState<'cash' | 'credit' | null>(null);
   const [prescriptionPhoto, setPrescriptionPhoto] = useState<string | null>(null);
+  const [lastSale, setLastSale] = useState<Sale | null>(null);
+  const [ticketPhone, setTicketPhone] = useState('');
 
   const isPharmacy = data.merchant?.mode === 'Pharmacie';
+  const storeName = data.merchant?.storeName ?? 'KND OS';
 
   const columns = width >= 1000 ? 4 : width >= 760 ? 3 : 2;
   const cardBasis = columns === 4 ? '23.4%' : columns === 3 ? '31.6%' : '48.2%';
@@ -123,6 +132,8 @@ export default function VenteScreen() {
   const closeCheckout = () => {
     setSheetOpen(false);
     setStep('cart');
+    setLastSale(null);
+    setTicketPhone('');
     setClientError('');
   };
 
@@ -163,11 +174,12 @@ export default function VenteScreen() {
     quantity: line.quantity,
   }));
 
-  const finishSale = (message: string) => {
+  const finishSale = (message: string, sale: Sale, phone?: string) => {
     cartRef.current = {};
     setCart({});
-    setSheetOpen(false);
-    setStep('cart');
+    setStep('ticket');
+    setLastSale(sale);
+    setTicketPhone(phone ?? '');
     setNewClientName('');
     setNewClientPhone('');
     setClientError('');
@@ -182,7 +194,7 @@ export default function VenteScreen() {
       toast(result.message ?? 'La vente n’a pas pu être enregistrée.', 'error');
       return;
     }
-    finishSale(`Vente ${formatCDF(result.sale.total)} OK · stock mis à jour`);
+    finishSale(`Vente ${formatCDF(result.sale.total)} OK · stock mis à jour`, result.sale);
   };
 
   const handleCreditForClient = (clientId: string) => {
@@ -194,6 +206,8 @@ export default function VenteScreen() {
     }
     finishSale(
       `Crédit de ${formatCDF(result.sale.total)} ajouté pour ${client?.name ?? 'le client'}`,
+      result.sale,
+      client?.phone,
     );
   };
 
@@ -248,17 +262,42 @@ export default function VenteScreen() {
     }
     finishSale(
       `Crédit de ${formatCDF(sale.sale.total)} ajouté pour ${result.client.name}`,
+      sale.sale,
+      result.client.phone,
     );
   };
 
+  const sendTicket = async () => {
+    if (!lastSale) return;
+    if (!ticketPhone.trim()) {
+      toast('Entrez le numéro WhatsApp du client.', 'error');
+      return;
+    }
+    const opened = await openWhatsApp(
+      ticketPhone,
+      saleWhatsAppMessage(storeName, lastSale),
+    );
+    if (!opened) {
+      toast('Numéro WhatsApp invalide. Vérifiez les 9 chiffres.', 'error');
+    }
+  };
+
   const sheetTitle =
-    step === 'cart' ? 'Panier' : step === 'credit' ? 'Vendre à crédit' : 'Nouveau client';
+    step === 'cart'
+      ? 'Panier'
+      : step === 'credit'
+        ? 'Vendre à crédit'
+        : step === 'new-client'
+          ? 'Nouveau client'
+          : 'Ticket de vente';
   const sheetSubtitle =
     step === 'cart'
       ? `${formatCountLabel(cartCount, 'unité')} · le stock sera déduit`
       : step === 'credit'
         ? 'Choisissez le client qui prendra ce crédit.'
-        : 'Le client et sa dette seront enregistrés.';
+        : step === 'new-client'
+          ? 'Le client et sa dette seront enregistrés.'
+          : 'Vente enregistrée · envoyez le ticket sur WhatsApp.';
 
   return (
     <View style={styles.root}>
@@ -440,6 +479,22 @@ export default function VenteScreen() {
                 />
               </View>
             </>
+          ) : step === 'ticket' ? (
+            <View style={styles.ticketFooter}>
+              <AppButton
+                label="Envoyer sur WhatsApp"
+                onPress={sendTicket}
+                variant="whatsapp"
+                size="md"
+                icon={<MessageCircle size={18} color={colors.white} strokeWidth={2} />}
+              />
+              <AppButton
+                label="Fermer"
+                onPress={closeCheckout}
+                variant="ghost"
+                size="md"
+              />
+            </View>
           ) : (
             <View style={styles.footerButton}>
               <AppButton
@@ -451,7 +506,61 @@ export default function VenteScreen() {
             </View>
           )
         }>
-        {step === 'cart' ? (
+        {step === 'ticket' && lastSale ? (
+          <>
+            <View style={styles.ticket}>
+              <KText variant="subtitle" color={colors.black} style={styles.ticketCenter}>
+                {storeName}
+              </KText>
+              <KText variant="small" color={TICKET_MUTED} style={styles.ticketCenter}>
+                {formatDateTime(lastSale.createdAt)}
+              </KText>
+
+              <View style={styles.ticketDivider} />
+
+              {lastSale.items.map((item) => (
+                <View key={item.productId} style={styles.ticketLine}>
+                  <View style={styles.ticketLineTexts}>
+                    <KText variant="small" color={colors.black} numberOfLines={1}>
+                      {item.name}
+                    </KText>
+                    <KText variant="small" color={TICKET_MUTED}>
+                      {formatQuantity(item.quantity)} {formatUnit(item.unit, item.quantity > 1)} ×{' '}
+                      {formatCDF(item.unitPrice)}
+                    </KText>
+                  </View>
+                  <KText variant="small" color={colors.black} style={styles.ticketAmount}>
+                    {formatCDF(Math.round(item.quantity * item.unitPrice))}
+                  </KText>
+                </View>
+              ))}
+
+              <View style={styles.ticketDivider} />
+
+              <View style={styles.ticketTotalRow}>
+                <KText variant="subtitle" color={colors.black}>
+                  TOTAL
+                </KText>
+                <KText variant="subtitle" color={colors.black}>
+                  {formatCDF(lastSale.total)}
+                </KText>
+              </View>
+              <KText variant="small" color={TICKET_MUTED} style={styles.ticketCenter}>
+                {lastSale.paymentType === 'credit' ? 'Vente à crédit' : 'Payé en espèces'} · Merci !
+              </KText>
+            </View>
+
+            <Field
+              label="Téléphone WhatsApp du client"
+              value={ticketPhone}
+              onChangeText={(value) => setTicketPhone(value.replace(/\D/g, '').slice(0, 9))}
+              placeholder="97 000 0000"
+              keyboardType="phone-pad"
+              prefix="+243"
+              helper="Le ticket sera pré-rempli dans WhatsApp, puis vous validez l’envoi."
+            />
+          </>
+        ) : step === 'cart' ? (
           <>
             <View style={styles.cartList}>
               {cartDetailed.map(({ product, quantity, lineTotal }) => (
@@ -873,6 +982,46 @@ const styles = StyleSheet.create({
   totalValue: {
     fontSize: 20,
     lineHeight: 26,
+  },
+  ticket: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: radius.md,
+    padding: 16,
+    gap: 6,
+  },
+  ticketCenter: {
+    textAlign: 'center',
+  },
+  ticketDivider: {
+    borderTopWidth: 1,
+    borderTopColor: '#D4D4D8',
+    borderStyle: 'dashed',
+    marginVertical: 6,
+  },
+  ticketLine: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    paddingVertical: 4,
+  },
+  ticketLineTexts: {
+    flex: 1,
+    gap: 1,
+    minWidth: 0,
+  },
+  ticketAmount: {
+    fontFamily: 'Inter_500Medium',
+    textAlign: 'right',
+  },
+  ticketTotalRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 2,
+  },
+  ticketFooter: {
+    flex: 1,
+    gap: 10,
   },
   footerButton: {
     flex: 1,
