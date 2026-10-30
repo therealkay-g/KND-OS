@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">KND OS</string>
+    <string name="title_activity_main">KND OS</string>
+    <string name="package_name">cd.knd.os</string>
+    <string name="custom_url_scheme">cd.knd.os</string>
+</resources>

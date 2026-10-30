@@ -51,3 +51,13 @@ example
 # generated native folders
 /ios
 /android
+
+# Capacitor (coque Android générée à partir de l'export web)
+dist-capacitor/
+capacitor/android/.gradle/
+capacitor/android/.idea/
+capacitor/android/build/
+capacitor/android/app/build/
+capacitor/android/local.properties
+capacitor/android/app/src/main/assets/public/
+capacitor/android/capacitor-cordova-android-plugins/

@@ -12,9 +12,9 @@ Projet de **Kay Nzogu** — octobre 2026.
 > **Stock Live** : une vente KND OS met à jour le stock des commerces Pro sur
 > Kindu Search via Supabase (ou le pont de démonstration local sans Supabase).
 > **Étape 6** : page **Don** Mobile Money manuel, page **/admin** de vérification,
-> **PWA installable** et configuration **EAS Build** pour l'APK. Le dépôt GitHub
-> est publié sur `main` ; Vercel/EAS n'ont pas encore été déployés (voir
-> [Déploiement](#déploiement)).
+> **PWA installable**, configuration **EAS Build** et **coque Capacitor** pour
+> l'APK. Le dépôt GitHub est publié sur `main` ; Vercel/EAS n'ont pas encore été
+> déployés (voir [Déploiement](#déploiement)).
 
 ---
 
@@ -423,7 +423,7 @@ Checklist alignée sur `docs/06-plan.md` :
   dans cet environnement).
 - `/don` : 4 montants, 3 opérateurs, liens `wa.me` corrects pour 20 000 CDF,
   enregistrement local du don vérifié.
-- `/admin` : login `kay-demo`, **2 en attente / 10 vérifiés**, vérification de
+- `/admin` : login `101276`, **2 en attente / 10 vérifiés**, vérification de
   `Alimentation Beya` (**1 / 11**), refus de `Salon Mwamba` (**0 / 11**).
 - Annuaire public : **11 commerces** après vérification, `Alimentation Beya`
   visible, `Salon Mwamba` absent ; la fiche de Beya n'affiche plus « En attente ».
@@ -452,7 +452,7 @@ Checklist alignée sur `docs/06-plan.md` :
 
 ### Tester `/admin`
 
-1. Ouvrir **http://localhost:3000/admin**. En mode démo, le code est **`kay-demo`**
+1. Ouvrir **http://localhost:3000/admin**. En mode démo, le code est **`101276`**
    (affiché sous le formulaire).
 2. Après connexion : **2 en attente**, **10 vérifiés**, carte de Kindu et deux
    cards avec photos/illustrations, catégorie, commune, adresse et téléphone.
@@ -503,7 +503,7 @@ La migration Étape 6 ajoute :
 - deux fiches de démonstration en attente, insérées avec `on conflict do nothing`.
 
 > L'admin de production doit être protégé par Supabase Auth (rôle `admin` dans
-> `app_metadata`) `[À CONFIRMER]`. Le code `kay-demo` et la clé service_role sont
+> `app_metadata`) `[À CONFIRMER]`. Le code `101276` et la clé service_role sont
 > des solutions de transition pour la recette, pas une authentification finale.
 
 ### PWA
@@ -579,6 +579,28 @@ build, définir dans EAS les variables KND OS de production
 direct de téléchargement de l'APK. Cette commande n'a pas été exécutée : aucun
 compte Expo authentifié n'est disponible.
 
+**APK Capacitor (sans EAS, fallback)**
+
+Le build natif Expo/CMake peut être instable sur une machine limitée en mémoire.
+Une coque Android **Capacitor 6** est fournie dans `capacitor/` : elle embarque
+l'export web Expo dans une WebView Android, sans CMake ni modules natifs React
+Native. Le script suivant exporte l'app web en mode local, synchronise Capacitor
+et compile un APK **debug** signé automatiquement :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\build-capacitor-apk.ps1
+```
+
+L'APK est copié dans `dist/knd-os-0.1.0-capacitor-debug.apk`. Il s'installe par
+sideload (activer « Installer des applications inconnues » sur Android). C'est un
+APK de démonstration, pas un build Play Store.
+
+> Limite de cette coque : la persistance utilise **localStorage** de la WebView,
+> pas Expo SQLite. L'export Capacitor est volontairement en mode local
+> (`EXPO_PUBLIC_KND_OS_PRO=false`) : le pont de stock `127.0.0.1` n'est pas
+> joignable depuis un téléphone. Le stock live Supabase/pont reste donc à
+> configurer côté web ou avec une URL réseau accessible.
+
 **Build Android local (sans EAS)**
 
 En l'absence de compte Expo/EAS, le script `scripts/build-android-local.ps1`
@@ -628,7 +650,7 @@ Copy-Item ninja-1.12.1\ninja.exe "$env:LOCALAPPDATA\KND-Android\cmake-3.31.6\cma
 
 | Variable | Où | Rôle |
 | --- | --- | --- |
-| `ADMIN_ACCESS_CODE` | serveur Kindu Search | Code `/admin` ; défaut démo `kay-demo` `[À CONFIRMER]` |
+| `ADMIN_ACCESS_CODE` | serveur Kindu Search | Code `/admin` ; défaut `101276` |
 | `ADMIN_SESSION_SECRET` | serveur Kindu Search | Signature du cookie admin ; défaut = code admin |
 | `SUPABASE_SERVICE_ROLE_KEY` | serveur Kindu Search | Lecture/écriture admin, jamais publique |
 | `NEXT_PUBLIC_DONATION_WHATSAPP` | navigateur | Numéro WhatsApp des dons `[À CONFIRMER]` |
@@ -709,6 +731,8 @@ supabase/
   migrations/              Schéma places/products/sync_queue + dons + admin
 scripts/
   build-android-local.ps1  Build APK Android local (sans EAS)
+  build-capacitor-apk.ps1  Export web + coque Capacitor + APK debug
+capacitor/                 Coque Android Capacitor (WebView de l'export web)
 eas.json                   Profil EAS preview (APK)
 docs/                      PRD, flows, design, TRD, backend, plan
 CLAUDE.md                  Règles de développement
@@ -733,6 +757,8 @@ CLAUDE.md                  Règles de développement
 - **Admin Kindu Search** : cookie `HttpOnly`, API serveur et Supabase service_role
   (ou mode démo local à deux fiches en attente).
 - **EAS Build** : profil `preview` pour générer un APK Android.
+- **Capacitor 6** : coque Android de l'export web Expo, pour un APK debug de
+  démonstration sans EAS ni CMake ; persistance WebView via `localStorage`.
 - **Build Android local** : script PowerShell + JDK 17 + Android SDK 37 + NDK 27.1
   + CMake 3.31.6 ; APK arm64 signé avec le keystore debug pour le sideload.
 

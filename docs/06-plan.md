@@ -61,6 +61,7 @@ Construire :
 Kindu Search Page Don : texte soutien + 4 montants + boutons Airtel/Orange/M-Pesa (liens wa.me paiement manuel V1)
 Page /admin : login simple (code Kay), carte avec pins gris (non vérifiés) / vert (vérifiés), liste "À vérifier", boutons Vérifier/Refuser
 Déploiement : Kindu Search sur Vercel (vercel.app), KND OS APK via EAS Build lien direct
+Fallback local : coque Capacitor 6 pour APK debug sans EAS (WebView/localStorage) ; EAS reste la cible de production
 PWA installable
 Vérifiable : https://kindusearch.vercel.app accessible sur téléphone à Kindu, page /admin affiche 2 commerces en attente, page /don affiche boutons Mobile Money, bouton "Installer l'app" sur mobile
 Données : Supabase prod, donations table

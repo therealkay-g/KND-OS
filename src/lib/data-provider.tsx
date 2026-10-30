@@ -153,6 +153,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useState<AppData>(() => createInitialData());
   const [hydrated, setHydrated] = useState(false);
   const [pendingPhone, setPendingPhone] = useState<string | null>(null);
+  const [pendingOtp, setPendingOtp] = useState<string | null>(null);
   const dataRef = useRef(data);
   const [stockSync, setStockSync] = useState<StockSyncStatus>(() => ({
     state: isStockSyncEnabled() ? 'idle' : 'disabled',
@@ -341,11 +342,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     return () => clearTimeout(timeout);
   }, [data, hydrated]);
 
-  const requestOtp = useCallback((phone: string) => {
+  const requestOtp = useCallback((phone: string): string => {
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
     setPendingPhone(phone);
+    setPendingOtp(code);
+    return code;
   }, []);
 
-  const verifyOtp = useCallback((code: string) => code.trim() === DEV_OTP_CODE, []);
+  const verifyOtp = useCallback((code: string) => code.trim() === pendingOtp, [pendingOtp]);
 
   const completeOnboarding = useCallback(
     (input: { phone: string; storeName: string; commune: Commune; mode: StoreMode }) => {
@@ -693,6 +697,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       hydrated,
       isLoggedIn,
       pendingPhone,
+      pendingOtp,
       todayStats,
       lowStockProducts,
       stockSync,
@@ -715,6 +720,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       hydrated,
       isLoggedIn,
       pendingPhone,
+      pendingOtp,
       todayStats,
       lowStockProducts,
       stockSync,

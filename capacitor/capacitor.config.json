@@ -1,0 +1,8 @@
+{
+  "appId": "cd.knd.os",
+  "appName": "KND OS",
+  "webDir": "../dist-capacitor",
+  "server": {
+    "androidScheme": "https"
+  }
+}

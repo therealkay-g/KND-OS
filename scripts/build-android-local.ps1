@@ -117,7 +117,10 @@ $props | Set-Content 'android\local.properties' -Encoding ascii
 Write-Output "Compilation Android ($Configuration)..."
 Push-Location 'android'
 try {
-  & .\gradlew.bat "assemble$Configuration" -PreactNativeArchitectures=$Architecture --no-daemon --console=plain
+  # Windows a les chemins longs désactivés : borner la longueur des objets CMake
+  # force CMake à hacher les chemins trop longs au lieu de laisser Ninja créer
+  # des répertoires > 260 caractères.
+  & .\gradlew.bat "assemble$Configuration" -PreactNativeArchitectures=$Architecture -Pexpo.android.cmakeObjectPathMax=200 --no-daemon --console=plain
   if ($LASTEXITCODE -ne 0) { throw "Gradle a échoué ($LASTEXITCODE)" }
 } finally {
   Pop-Location

@@ -1,0 +1,17 @@
+{
+  "name": "knd-os-capacitor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Coque Android Capacitor de KND OS",
+  "scripts": {
+    "sync": "cap sync android",
+    "build:debug": "cap sync android && cd android && gradlew.bat assembleDebug --no-daemon"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.2",
+    "@capacitor/core": "^6.2.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.2"
+  }
+}

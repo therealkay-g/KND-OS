@@ -14,8 +14,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppButton } from '@/components/ui/app-button';
 import { Field } from '@/components/ui/field';
 import { KText } from '@/components/ui/text';
-import { DEV_OTP_CODE, useApp } from '@/lib/data-provider';
+import { useApp } from '@/lib/data-provider';
 import { formatPhone } from '@/lib/format';
+import { openWhatsApp } from '@/lib/whatsapp';
 import { colors, radius } from '@/lib/theme';
 
 export default function CodeScreen() {
@@ -53,9 +54,11 @@ export default function CodeScreen() {
     }
   };
 
-  const handleResend = () => {
-    requestOtp(phone);
-    setInfo('Un nouveau code a été envoyé (code : 1234).');
+  const handleResend = async () => {
+    const code = requestOtp(phone);
+    const message = `Votre code de connexion KND OS est : ${code}`;
+    await openWhatsApp(phone, message);
+    setInfo('Un nouveau code a été envoyé via WhatsApp.');
     setError('');
   };
 
@@ -131,7 +134,7 @@ export default function CodeScreen() {
                 <KText variant="small" color={colors.accent} style={styles.helpStrong}>
                   Code de connexion ·{' '}
                 </KText>
-                Le code de développement est {DEV_OTP_CODE}.
+                Vérifiez WhatsApp pour votre code à 4 chiffres.
               </KText>
             </View>
           </View>

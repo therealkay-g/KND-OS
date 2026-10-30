@@ -15,6 +15,7 @@ import { AppButton } from '@/components/ui/app-button';
 import { Field } from '@/components/ui/field';
 import { KText } from '@/components/ui/text';
 import { useApp } from '@/lib/data-provider';
+import { openWhatsApp } from '@/lib/whatsapp';
 import { colors, layout, radius } from '@/lib/theme';
 
 export default function LoginScreen() {
@@ -29,12 +30,14 @@ export default function LoginScreen() {
     if (error) setError('');
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (phone.length !== 9) {
       setError('Entrez un numéro à 9 chiffres (ex. 970 000 000).');
       return;
     }
-    requestOtp(phone);
+    const code = requestOtp(phone);
+    const message = `Votre code de connexion KND OS est : ${code}`;
+    await openWhatsApp(phone, message);
     router.push({ pathname: '/code', params: { phone } });
   };
 
